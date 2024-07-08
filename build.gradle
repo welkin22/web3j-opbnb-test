@@ -27,7 +27,7 @@ web3j {
 
 node {
     nodeProjectDir.set(file("$projectDir"))
-    version = '16.13.0'  // 或其他更新的版本
+    version = '16.13.0'
     download = true
 }
 
