@@ -1,5 +1,6 @@
 package org.web3j;
 
+import org.web3j.contracts.eip20.generated.ERC20;
 import org.web3j.crypto.Credentials;
 import org.web3j.crypto.RawTransaction;
 import org.web3j.crypto.TransactionEncoder;
@@ -51,9 +52,20 @@ public class Web3App {
             case "raw_transfer":
                 RawTransfer(web3j,args[1],args[2]);//same with simple_transfer
                 break;
+            case "erc20_transfer":
+                ERC20Transfer(web3j,args[1],args[2],args[3]);
+                break;
             default:
                 throw new RuntimeException("Unsupported commend type");
         }
+    }
+
+    private static void ERC20Transfer(Web3j web3j, String contractAddress, String to,String tokenValue) throws Exception {
+        Credentials credentials = Credentials.create(PRIVATE_KEY);
+        ERC20 usdt = ERC20.load(contractAddress, web3j, credentials, new DefaultGasProvider());
+        TransactionReceipt receipt = usdt.transfer(to, Convert.toWei(tokenValue,Convert.Unit.ETHER).toBigInteger()).send();
+        System.out.println("tx:"+receipt.getTransactionHash());
+        System.out.println("isSuccess:"+receipt.getStatus());
     }
 
     private static void RawTransfer(Web3j web3j, String to, String ether) throws Exception{
